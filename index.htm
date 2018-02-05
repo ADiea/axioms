@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>Handwriteing)</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style type="text/css">
+			body {
+			
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+			
+				position: absolute;
+				width: 100%;
+				color: #80a000;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>	
+		<div id="info"></div>
+		<div id="container"></div>
+
+		<script type="text/javascript">
+		
+		var  lett = [];
+		var text = "noi stim ca unu ori unu fac unu dar un inorog ori o para";
+		var textCursor=-1;
+		var textAdvance=0;
+		var lineCursor=10;
+		
+		var SCREEN_WIDTH = window.innerWidth,
+			SCREEN_HEIGHT = window.innerHeight,
+			container, canvas, context;
+		
+		init();
+		setInterval(loop, 1000/60);
+		
+		function init() 
+		{
+			container = document.getElementById('container');
+				
+			canvas = document.createElement("canvas");
+			canvas.width = SCREEN_WIDTH;
+			canvas.height = SCREEN_HEIGHT;
+			container.appendChild(canvas);
+
+			context = canvas.getContext("2d");
+			context.fillStyle = "#ffffdd";
+			context.fillRect (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+		
+			var aCode = 'a'.charCodeAt();
+			var zCode = 'z'.charCodeAt();
+			
+			for(var i = 0; i<= zCode - aCode; i++)
+			{
+				lett.push(new Image());
+				lett[i].src = 'img/hw/'+(String.fromCharCode(i+aCode))+'.png';
+			}
+			
+			context.scale(0.15, 0.15);
+			
+		}
+
+		function drawChar(ch, y)
+		{
+			if(ch === ' ')
+			{
+				lineCursor += lett[0].width;
+			}
+			else
+			{
+				var code = ch.charCodeAt() - 'a'.charCodeAt();
+				var img = lett[code];
+				context.drawImage(img, lineCursor, y);
+				lineCursor += img.width;
+			}
+		}
+
+		function loop() 
+		{
+			textAdvance++;
+			if(textAdvance > 0)
+			{
+				textAdvance = 0;
+				textCursor++;
+				
+				if(textCursor < text.length)
+				{
+					drawChar(text[textCursor], 10);
+				}
+			}
+		}
+		
+		</script>
+
+	
+
+</body></html>
