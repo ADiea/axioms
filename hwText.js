@@ -47,12 +47,23 @@ function HwText(p)
 		addLetter('â', 'aa');
 		addLetter('î', 'i_');
 		addLetter('ț', 't_');
+		
+		this.p.textSpeed = (this.p.text[0].length ) / this.p.textInitialSpeed;
 	}
 	
 	this.loop = function(delta)
 	{
-		this.textAdvance += delta;
-		if(this.textAdvance > this.p.textSpeed)
+
+		
+		this.textAdvance += delta*this.p.textSpeed;
+		
+		this.p.textSpeed  -= this.p.textAcceleration * delta;
+		
+		if(this.p.textSpeed <= this.p.textMinSpeed)
+			this.p.textSpeed = this.p.textMinSpeed;
+		
+		
+		if(this.textAdvance > 1.0)
 		{
 			this.textAdvance = 0;
 			this.lineChar++;
@@ -68,6 +79,9 @@ function HwText(p)
 				{
 					this.lineChar = -1;
 					this.rowChar++;
+					
+					if(this.rowChar < this.p.text.length)
+						this.p.textSpeed = (this.p.text[this.rowChar].length ) / this.p.textInitialSpeed;
 					
 					this.lineCursor = this.p.startX;
 					this.rowCursor += this.p.letterHeight;
